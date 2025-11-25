@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="ru">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Лента постов</title>
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <style>
+      body {
+        font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
+          sans-serif;
+        max-width: 600px;
+        margin: 40px auto;
+      }
+
+      h1 {
+        margin-bottom: 16px;
+      }
+
+      #posts {
+        margin-bottom: 16px;
+      }
+
+      .post {
+        border: 1px solid #e5e7eb;
+        padding: 12px;
+        border-radius: 8px;
+        margin-bottom: 12px;
+      }
+
+      .post h2 {
+        margin-top: 0;
+      }
+
+      button {
+        padding: 4px 10px;
+        margin-right: 6px;
+        margin-top: 6px;
+        cursor: pointer;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Лента постов</h1>
+
+    <div id="posts">
+      <div class="post" data-id="1">
+        <h2>Пост 1</h2>
+        <p>Текст поста 1</p>
+        <button class="like-btn">Лайков: 0</button>
+        <button class="delete-btn">Удалить</button>
+      </div>
+
+      <div class="post" data-id="2">
+        <h2>Пост 2</h2>
+        <p>Текст поста 2</p>
+        <button class="like-btn">Лайков: 0</button>
+        <button class="delete-btn">Удалить</button>
+      </div>
+
+      <div class="post" data-id="3">
+        <h2>Пост 3</h2>
+        <p>Текст поста 3</p>
+        <button class="like-btn">Лайков: 0</button>
+        <button class="delete-btn">Удалить</button>
+      </div>
+    </div>
+
+    <button id="add-post">Добавить ещё пост</button>
+
+    <script>
+      const likesById = {
+        1: 0,
+        2: 0,
+        3: 0,
+      };
+
+      let lastPostId = 3;
+
+      $("#posts").on("click", ".like-btn", function () {
+        const $post = $(this).closest(".post");
+        const id = $post.data("id");
+
+        if (likesById[id] === undefined) {
+          likesById[id] = 0;
+        }
+
+        likesById[id] += 1;
+
+        $(this).text("Лайков: " + likesById[id]);
+      });
+
+      $("#posts").on("click", ".delete-btn", function () {
+        const $post = $(this).closest(".post");
+        const id = $post.data("id");
+
+        $post.remove();
+        delete likesById[id];
+      });
+
+      function createPost(id) {
+        const $post = $(`
+          <div class="post" data-id="${id}">
+            <h2>Пост ${id}</h2>
+            <p>Текст поста ${id}</p>
+            <button class="like-btn">Лайков: 0</button>
+            <button class="delete-btn">Удалить</button>
+          </div>
+        `);
+
+        return $post;
+      }
+
+      $("#add-post").on("click", function () {
+        lastPostId += 1;
+        const id = lastPostId;
+
+        likesById[id] = 0;
+
+        const $newPost = createPost(id);
+        $("#posts").append($newPost);
+      });
+    </script>
+  </body>
+</html>
