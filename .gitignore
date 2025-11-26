@@ -20,4 +20,6 @@
 1-lesson/venv/
 
 */.DS_Store
-.DS_Store
+.DS_Store4-lesson/.env
+4-lesson/logs/
+

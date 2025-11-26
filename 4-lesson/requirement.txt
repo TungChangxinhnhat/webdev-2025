@@ -1,0 +1,2 @@
+redis>=5.0
+printf "fastapi>=0.115\nuvicorn[standard]>=0.30\nredis>=5.0\npython-dotenv>=1.0\n" > requirement.txt
