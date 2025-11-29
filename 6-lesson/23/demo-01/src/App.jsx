@@ -1,15 +1,38 @@
-import Counter from "./components/Counter.jsx";
-import Posts from "./components/Posts.jsx";
-import UserPanel from "./components/UserPanel.jsx";
-import WindowInfo from "./components/WindowInfo.jsx";
+import { BrowserRouter, Routes, Route, Link } from "react-router-dom";
+import Home from "./pages/Home";
+import News from "./pages/News";
+import Login from "./pages/Login";
+import CreateNews from "./pages/CreateNews";
+import { AuthProvider, useAuth } from "./context/AuthContext";
+import { RequireAuthorVerified } from "./components/Guard";
+
+function Menu() {
+  const { user, logout } = useAuth();
+  return (
+    <nav style={{ display: "flex", gap: 12, marginBottom: 12 }}>
+      <Link to="/">Home</Link>
+      {!user && <Link to="/login">Login</Link>}
+      {user && (<>
+        <span>Hi, {user.email} ({user.role}{user.is_author_verified ? ", verified" : ""})</span>
+        <button onClick={logout}>Logout</button>
+      </>)}
+      <RequireAuthorVerified><Link to="/create">Create</Link></RequireAuthorVerified>
+    </nav>
+  );
+}
 
 export default function App() {
   return (
-    <>
-        <WindowInfo/>
-        <Counter/>
-        <UserPanel isLoading={true}/>
-        <Posts/>
-    </>
+    <AuthProvider>
+      <BrowserRouter>
+        <Menu />
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/news/:id" element={<News />} />
+          <Route path="/login" element={<Login />} />
+          <Route path="/create" element={<CreateNews />} />
+        </Routes>
+      </BrowserRouter>
+    </AuthProvider>
   );
 }
